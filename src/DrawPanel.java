@@ -70,9 +70,12 @@ class DrawPanel extends JPanel implements MouseListener {
             for (int i = 0; i < hand.size(); i++) {
                 Rectangle box = hand.get(i).getCardBox();
                 if (box.contains(clicked)) {
-                    hand.get(i).flipCard();
+                    hand.get(i).flipHighlight();
                 }
             }
+
+
+
         }
 
         // right click
@@ -80,7 +83,12 @@ class DrawPanel extends JPanel implements MouseListener {
             for (int i = 0; i < hand.size(); i++) {
                 Rectangle box = hand.get(i).getCardBox();
                 if (box.contains(clicked)) {
-                    hand.get(i).flipHighlight();
+                    if (hand.get(i).getHighlight()) {
+                        Card.replaceCard(hand, i);
+                    }
+                    else {
+                        hand.get(i).flipHighlight();
+                    }
                 }
             }
         }

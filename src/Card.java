@@ -116,4 +116,63 @@ public class Card {
         }
         return hand;
     }
+
+    public static ArrayList<Card> replaceCard(ArrayList<Card> hand, int index) {
+        ArrayList<Card> deck = Card.buildDeck();
+        int r = (int)(Math.random() * deck.size());
+        hand.set(index, deck.get(r));
+
+        return hand;
+    }
+
+    public static int checkSum(ArrayList<Card> hand) {
+        int numHighlightedCards = 0;
+
+        for (int i = 0; i < hand.size(); i++) {
+            if (hand.get(i).getHighlight()) {
+                numHighlightedCards ++;
+            }
+        }
+
+        int totalSum = 0;
+        if (numHighlightedCards == 2) {
+            for (int i = 0; i < hand.size(); i++) {
+                if (hand.get(i).getHighlight()) {
+                    String val = hand.get(i).getValue();
+                    if (val.equalsIgnoreCase("ace")) {
+                        totalSum ++;
+                    }
+                    if (val.equals("01")) {
+                        totalSum ++;
+                    }
+                    if (val.equals("02")) {
+                        totalSum += 2;
+                    }
+                    if (val.equals("03")) {
+                        totalSum += 3;
+                    }
+                    if (val.equals("04")) {
+                        totalSum += 4;
+                    }
+                    if (val.equals("05")) {
+                        totalSum += 5;
+                    }
+                    if (val.equals("06")) {
+                        totalSum += 6;
+                    }
+                    if (val.equals("07")) {
+                        totalSum += 7;
+                    }
+                    if (val.equals("08")) {
+                        totalSum += 8;
+                    }
+                    if (val.equals("09")) {
+                        totalSum += 9;
+                    }
+                }
+            }
+        }
+        return totalSum;
+    }
+
 }

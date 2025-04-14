@@ -58,7 +58,7 @@ class DrawPanel extends JPanel implements MouseListener {
         g.drawString("REPLACE CARDS", 333, 45); // print method
         g.drawString("Cards left: " + deck.size(), 30, 450); // print method
         if (showLoseMessage) {
-            g.drawString("No available moves! GAME OVER!", 30, 300);
+            g.drawString("No available moves! GAME OVER!", 30, 350);
         }
 
         // border around text
@@ -75,6 +75,7 @@ class DrawPanel extends JPanel implements MouseListener {
             if (button.contains(clicked)) { // rectangle method; takes in a point obj and tells u if the point is in the object (t/f)
                 hand = Card.buildHand();
                 deck = Card.buildDeck();
+                showLoseMessage = false;
             }
 
             // go through each card
@@ -89,9 +90,6 @@ class DrawPanel extends JPanel implements MouseListener {
 
             if (replace.contains(clicked)) {
                 deck = Card.checkDeck(deck, hand);
-                if (!Card.movesLeft(hand)) {
-                    showLoseMessage = true;
-                }
                 System.out.println(deck);
                 if (Card.canEliminate(hand)) {
                     for (int i = 0; i < hand.size(); i++) {
@@ -100,6 +98,9 @@ class DrawPanel extends JPanel implements MouseListener {
                             Card.replaceCard(deck, hand, i);
                         }
                     }
+                }
+                if (!Card.movesLeft(hand)) {
+                    showLoseMessage = true;
                 }
 
                 deck = Card.checkDeck(deck, hand);

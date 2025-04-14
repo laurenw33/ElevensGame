@@ -151,7 +151,7 @@ public class Card {
             // parse string to int
             String str = hand.get(i).getValue();
             int num = 0;
-            if (!(str.equals("A") || str.equals("K") || str.equals("Q")|| str.equals("J"))) {
+            if (!(str.equals("A") || str.equals("K") || str.equals("Q")|| str.equals("J") || str.equals("10"))) {
                 String[] parts = str.split("");
                 str = parts[1];
                 num = Integer.parseInt(str);
@@ -159,15 +159,23 @@ public class Card {
             else if (str.equals("A")) {
                 num = 1;
             }
-
+            else if (str.equals("10")) {
+                num = 10;
+            }
             // compare numbers
             for (int j = 0; j < hand.size(); j++) {
                 String temp = hand.get(j).getValue();
                 int num2 = 0;
-                if (!(temp.equals("A") || temp.equals("K") || temp.equals("Q")|| temp.equals("J"))) {
+                if (!(temp.equals("A") || temp.equals("K") || temp.equals("Q")|| temp.equals("J") || temp.equals("10"))) {
                     String[] parts2 = temp.split("");
                     str = parts2[1];
                     num2 = Integer.parseInt(str);
+                }
+                else if (str.equals("A")) {
+                    num = 1;
+                }
+                else if (str.equals("10")) {
+                    num = 10;
                 }
 
                 // check value
@@ -189,11 +197,11 @@ public class Card {
                 queen ++;
             }
             else if (c.getValue().equals("K")) {
-                jack ++;
+                king ++;
             }
         }
 
-        if (jack + queen + king == 11) {
+        if (jack == 1 && queen == 1 && king == 1) {
             movesLeft = true;
         }
         return movesLeft;
@@ -243,6 +251,9 @@ public class Card {
                     }
                     else if (val.equals("09")) {
                         totalSum += 9;
+                    }
+                    else if (val.equals("10")) {
+                        totalSum += 10;
                     }
                 }
             }

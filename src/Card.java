@@ -117,62 +117,160 @@ public class Card {
         return hand;
     }
 
-    public static ArrayList<Card> replaceCard(ArrayList<Card> hand, int index) {
-        ArrayList<Card> deck = Card.buildDeck();
+    public static ArrayList<Card> checkDeck(ArrayList<Card> deck, ArrayList<Card> hand) {
+        if (Card.canEliminate(hand)) {
+            for (int h = 0; h < hand.size(); h++) {
+                if (hand.get(h).getHighlight()) {
+                    String handName = hand.get(h).getImageFileName();
+                    for (int i = 0; i < deck.size(); i++) {
+                        String deckName = deck.get(i).getImageFileName();
+                        if (handName.equals(deckName)) {
+                            deck.remove(i);
+                            i--;
+                        }
+                    }
+                }
+            }
+        }
+
+        return deck;
+    }
+
+
+    public static ArrayList<Card> replaceCard(ArrayList<Card> deck, ArrayList<Card> hand, int index) {
         int r = (int)(Math.random() * deck.size());
         hand.set(index, deck.get(r));
 
         return hand;
     }
 
-    public static int checkSum(ArrayList<Card> hand) {
+    public static boolean movesLeft(ArrayList<Card> hand) {
+        boolean movesLeft = false;
+        // check numbers
+        for (int i = 0; i < hand.size(); i++) {
+            String str = hand.get(i).getValue();
+            int num = 0;
+            if (!(str.equals("A") || str.equals("K") || str.equals("Q")|| str.equals("J"))) {
+                String[] parts = str.split("");
+                str = parts[1];
+                num = Integer.parseInt(str);
+            }
+            for (int j = 0; j < hand.size(); j++) {
+                String temp = hand.get(i).getValue();
+                int num2 = 0;
+                if (!(temp.equals("A") || temp.equals("K") || temp.equals("Q")|| temp.equals("J"))) {
+                    String[] parts2 = str.split("");
+                    str = parts2[1];
+                    num2 = Integer.parseInt(str);
+                }
+                if (num + num2 == 11) {
+                    movesLeft = true;
+                }
+            }
+        }
+        // check ace, king, queen
+        for (int i = 0; i < hand.size(); i++) {
+            String str = hand.get(i).getValue();
+            int num = 0;
+            if (!(str.equals("A") || str.equals("K") || str.equals("Q") || str.equals("J"))) {
+                String[] parts = str.split("");
+                str = parts[1];
+                num = Integer.parseInt(str);
+            }
+            for (int j = 0; j < hand.size(); j++) {
+                String temp = hand.get(i).getValue();
+                int num2 = 0;
+                if (!(temp.equals("A") || temp.equals("K") || temp.equals("Q") || temp.equals("J"))) {
+                    String[] parts2 = str.split("");
+                    str = parts2[1];
+                    num2 = Integer.parseInt(str);
+                }
+                if (num + num2 == 11) {
+                    movesLeft = true;
+                }
+            }
+        }
+        return movesLeft;
+    }
+
+    public static boolean canEliminate(ArrayList<Card> hand) {
         int numHighlightedCards = 0;
+        boolean canEliminate = false;
 
         for (int i = 0; i < hand.size(); i++) {
             if (hand.get(i).getHighlight()) {
                 numHighlightedCards ++;
             }
         }
+        System.out.println(numHighlightedCards);
 
         int totalSum = 0;
         if (numHighlightedCards == 2) {
             for (int i = 0; i < hand.size(); i++) {
                 if (hand.get(i).getHighlight()) {
                     String val = hand.get(i).getValue();
-                    if (val.equalsIgnoreCase("ace")) {
+                    if (val.equalsIgnoreCase("A")) {
                         totalSum ++;
                     }
-                    if (val.equals("01")) {
+                    else if (val.equals("01")) {
                         totalSum ++;
                     }
-                    if (val.equals("02")) {
+                    else if (val.equals("02")) {
                         totalSum += 2;
                     }
-                    if (val.equals("03")) {
+                    else if (val.equals("03")) {
                         totalSum += 3;
                     }
-                    if (val.equals("04")) {
+                    else if (val.equals("04")) {
                         totalSum += 4;
                     }
-                    if (val.equals("05")) {
+                    else if (val.equals("05")) {
                         totalSum += 5;
                     }
-                    if (val.equals("06")) {
+                    else if (val.equals("06")) {
                         totalSum += 6;
                     }
-                    if (val.equals("07")) {
+                    else if (val.equals("07")) {
                         totalSum += 7;
                     }
-                    if (val.equals("08")) {
+                    else if (val.equals("08")) {
                         totalSum += 8;
                     }
-                    if (val.equals("09")) {
+                    else if (val.equals("09")) {
                         totalSum += 9;
                     }
                 }
             }
+            if (totalSum == 11) {
+                canEliminate = true;
+            }
         }
-        return totalSum;
+
+        if (numHighlightedCards == 3) {
+            int jacks = 0;
+            int queens = 0;
+            int kings = 0;
+            for (int i = 0; i < hand.size(); i++) {
+                if (hand.get(i).getHighlight()) {
+                    String value = hand.get(i).getValue();
+                    if (value.equalsIgnoreCase("J")) {
+                        jacks++;
+                    }
+                    else if (value.equalsIgnoreCase("Q")) {
+                        queens++;
+                    }
+                    else if (value.equalsIgnoreCase("K")) {
+                        kings++;
+                    }
+                }
+            }
+            if (jacks == 1 && queens == 1 && kings == 1) {
+                canEliminate = true;
+            }
+        }
+
+
+        return canEliminate;
     }
 
 }

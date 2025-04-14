@@ -10,12 +10,16 @@ import java.awt.Font;
 class DrawPanel extends JPanel implements MouseListener {
 
     private ArrayList<Card> hand;
+    private ArrayList<Card> deck;
 
     // Rectangle object represents a rectangle
     private Rectangle button;
+    private Rectangle replace;
 
     public DrawPanel() {
         button = new Rectangle(147, 250, 160, 26); //get new cards button
+        replace = new Rectangle(330, 25,160, 26); // replace card
+        deck = Card.buildDeck();
         this.addMouseListener(this);
         hand = Card.buildHand();
         System.out.println(hand);
@@ -48,13 +52,16 @@ class DrawPanel extends JPanel implements MouseListener {
 
         // drawing the bottom button
         g.setFont(new Font("Courier New", Font.BOLD, 20));
-        g.drawString("GET NEW CARDS", 150, 270); // print method
+        g.drawString("PLAY AGAIN", 165, 270); // print method
+        g.drawString("REPLACE CARDS", 333, 45); // print method
+        g.drawString("Cards left: " + deck.size(), 30, 300); // print method
+
         // border around text
         g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
+        g.drawRect((int)replace.getX(), (int)replace.getY(), (int)replace.getWidth(), (int)replace.getHeight());
     }
 
     public void mousePressed(MouseEvent e) {
-
         Point clicked = e.getPoint();
 
         // left click (1 --> left; 3 --> right)
@@ -62,6 +69,7 @@ class DrawPanel extends JPanel implements MouseListener {
             // if clicked is inside the button rectangle
             if (button.contains(clicked)) { // rectangle method; takes in a point obj and tells u if the point is in the object (t/f)
                 hand = Card.buildHand();
+                deck = Card.buildDeck();
             }
 
             // go through each card
@@ -74,25 +82,19 @@ class DrawPanel extends JPanel implements MouseListener {
                 }
             }
 
-
-
-        }
-
-        // right click
-        if (e.getButton() == 3) {
-            for (int i = 0; i < hand.size(); i++) {
-                Rectangle box = hand.get(i).getCardBox();
-                if (box.contains(clicked)) {
-                    if (hand.get(i).getHighlight()) {
-                        Card.replaceCard(hand, i);
-                    }
-                    else {
-                        hand.get(i).flipHighlight();
+            if (replace.contains(clicked)) {
+                deck = Card.checkDeck(deck, hand);
+                System.out.println(deck);
+                if (Card.canEliminate(hand)) {
+                    for (int i = 0; i < hand.size(); i++) {
+                        if (hand.get(i).getHighlight()) {
+                            Card.replaceCard(deck, hand, i);
+                        }
                     }
                 }
+                deck = Card.checkDeck(deck, hand);
             }
         }
-
 
     }
 

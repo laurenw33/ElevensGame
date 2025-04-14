@@ -171,16 +171,19 @@ public class Card {
                     str = parts2[1];
                     num2 = Integer.parseInt(str);
                 }
-                else if (str.equals("A")) {
-                    num = 1;
+                else if (temp.equals("A")) {
+                    num2 = 1;
                 }
-                else if (str.equals("10")) {
-                    num = 10;
+                else if (temp.equals("10")) {
+                    num2 = 10;
                 }
 
                 // check value
                 if (num + num2 == 11) {
                     movesLeft = true;
+                    System.out.println("NUM1: " + num);
+                    System.out.println("NUM2: " + num2);
+                    System.out.println("EQUALS 11");
                 }
             }
         }
@@ -190,19 +193,20 @@ public class Card {
         int queen = 0;
         int king = 0;
         for (Card c : hand) {
-            if (c.getValue().equals("J")) {
+            if (c.getValue().equalsIgnoreCase("J")) {
                 jack ++;
             }
-            else if (c.getValue().equals("Q")) {
+            else if (c.getValue().equalsIgnoreCase("Q")) {
                 queen ++;
             }
-            else if (c.getValue().equals("K")) {
+            else if (c.getValue().equalsIgnoreCase("K")) {
                 king ++;
             }
         }
 
-        if (jack == 1 && queen == 1 && king == 1) {
+        if (jack > 0 && queen > 0 && king > 0) {
             movesLeft = true;
+            System.out.println("EQUALS JQK");
         }
         return movesLeft;
     }

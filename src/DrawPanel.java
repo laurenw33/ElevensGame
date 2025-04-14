@@ -104,6 +104,7 @@ class DrawPanel extends JPanel implements MouseListener {
                 }
 
                 deck = Card.checkDeck(deck, hand);
+                System.out.println(showLoseMessage);
             }
         }
 

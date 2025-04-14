@@ -148,6 +148,7 @@ public class Card {
         boolean movesLeft = false;
         // check numbers
         for (int i = 0; i < hand.size(); i++) {
+            // parse string to int
             String str = hand.get(i).getValue();
             int num = 0;
             if (!(str.equals("A") || str.equals("K") || str.equals("Q")|| str.equals("J"))) {
@@ -155,40 +156,45 @@ public class Card {
                 str = parts[1];
                 num = Integer.parseInt(str);
             }
+            else if (str.equals("A")) {
+                num = 1;
+            }
+
+            // compare numbers
             for (int j = 0; j < hand.size(); j++) {
-                String temp = hand.get(i).getValue();
+                String temp = hand.get(j).getValue();
                 int num2 = 0;
                 if (!(temp.equals("A") || temp.equals("K") || temp.equals("Q")|| temp.equals("J"))) {
-                    String[] parts2 = str.split("");
+                    String[] parts2 = temp.split("");
                     str = parts2[1];
                     num2 = Integer.parseInt(str);
                 }
+
+                // check value
                 if (num + num2 == 11) {
                     movesLeft = true;
                 }
             }
         }
-        // check ace, king, queen
-        for (int i = 0; i < hand.size(); i++) {
-            String str = hand.get(i).getValue();
-            int num = 0;
-            if (!(str.equals("A") || str.equals("K") || str.equals("Q") || str.equals("J"))) {
-                String[] parts = str.split("");
-                str = parts[1];
-                num = Integer.parseInt(str);
+
+        // check jack, queen, king
+        int jack = 0;
+        int queen = 0;
+        int king = 0;
+        for (Card c : hand) {
+            if (c.getValue().equals("J")) {
+                jack ++;
             }
-            for (int j = 0; j < hand.size(); j++) {
-                String temp = hand.get(i).getValue();
-                int num2 = 0;
-                if (!(temp.equals("A") || temp.equals("K") || temp.equals("Q") || temp.equals("J"))) {
-                    String[] parts2 = str.split("");
-                    str = parts2[1];
-                    num2 = Integer.parseInt(str);
-                }
-                if (num + num2 == 11) {
-                    movesLeft = true;
-                }
+            else if (c.getValue().equals("Q")) {
+                queen ++;
             }
+            else if (c.getValue().equals("K")) {
+                jack ++;
+            }
+        }
+
+        if (jack + queen + king == 11) {
+            movesLeft = true;
         }
         return movesLeft;
     }
@@ -202,7 +208,6 @@ public class Card {
                 numHighlightedCards ++;
             }
         }
-        System.out.println(numHighlightedCards);
 
         int totalSum = 0;
         if (numHighlightedCards == 2) {

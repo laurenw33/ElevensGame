@@ -16,6 +16,8 @@ class DrawPanel extends JPanel implements MouseListener {
     private Rectangle button;
     private Rectangle replace;
 
+    private boolean showLoseMessage = false;
+
     public DrawPanel() {
         button = new Rectangle(147, 250, 160, 26); //get new cards button
         replace = new Rectangle(330, 25,160, 26); // replace card
@@ -54,7 +56,10 @@ class DrawPanel extends JPanel implements MouseListener {
         g.setFont(new Font("Courier New", Font.BOLD, 20));
         g.drawString("PLAY AGAIN", 165, 270); // print method
         g.drawString("REPLACE CARDS", 333, 45); // print method
-        g.drawString("Cards left: " + deck.size(), 30, 300); // print method
+        g.drawString("Cards left: " + deck.size(), 30, 450); // print method
+        if (showLoseMessage) {
+            g.drawString("No available moves! GAME OVER!", 30, 300);
+        }
 
         // border around text
         g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
@@ -84,14 +89,19 @@ class DrawPanel extends JPanel implements MouseListener {
 
             if (replace.contains(clicked)) {
                 deck = Card.checkDeck(deck, hand);
+                if (!Card.movesLeft(hand)) {
+                    showLoseMessage = true;
+                }
                 System.out.println(deck);
                 if (Card.canEliminate(hand)) {
                     for (int i = 0; i < hand.size(); i++) {
                         if (hand.get(i).getHighlight()) {
+                            System.out.println(hand.get(i).getValue());
                             Card.replaceCard(deck, hand, i);
                         }
                     }
                 }
+
                 deck = Card.checkDeck(deck, hand);
             }
         }

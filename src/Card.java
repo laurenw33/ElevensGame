@@ -138,8 +138,16 @@ public class Card {
 
 
     public static ArrayList<Card> replaceCard(ArrayList<Card> deck, ArrayList<Card> hand, int index) {
-        int r = (int)(Math.random() * deck.size());
-        hand.set(index, deck.get(r));
+        ArrayList<Card> temp = new ArrayList<>();
+        for (int i = 0; i < hand.size(); i++) {
+            for (int x = 0; x < deck.size(); x++) {
+                if (!deck.get(x).getImageFileName().equalsIgnoreCase(hand.get(i).getImageFileName())) {
+                    temp.add(deck.get(x));
+                }
+            }
+        }
+        int r = (int)(Math.random() * temp.size());
+        hand.set(index, temp.get(r));
 
         return hand;
     }
